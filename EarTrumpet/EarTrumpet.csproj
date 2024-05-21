@@ -146,6 +146,9 @@
     <Compile Include="Addons\EarTrumpet.Actions\ViewModel\Triggers\HotkeyTriggerViewModel.cs" />
     <Compile Include="Addons\EarTrumpet.Actions\ViewModel\Triggers\ProcessTriggerViewModel.cs" />
     <Compile Include="Addons\EarTrumpet.Actions\ViewModel\VolumeViewModel.cs" />
+    <Compile Include="Addons\EarTrumpet.Actions\Views\AppVolumeDialog.xaml.cs">
+      <DependentUpon>AppVolumeDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataModel\AppInformation\AppInformationFactory.cs" />
     <Compile Include="DataModel\AppInformation\IAppInfo.cs" />
     <Compile Include="DataModel\AppInformation\Internal\DesktopAppInfo.cs" />
@@ -400,6 +403,10 @@
     <Page Include="Addons\EarTrumpet.Actions\AddonResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Addons\EarTrumpet.Actions\Views\AppVolumeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Mutable.xaml">
       <SubType>Designer</SubType>

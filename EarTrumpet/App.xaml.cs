@@ -30,7 +30,7 @@ namespace EarTrumpet
         public static TimeSpan Duration => s_appTimer.Elapsed;
 
         public FlyoutWindow FlyoutWindow { get; private set; }
-        public DeviceCollectionViewModel CollectionViewModel { get; private set; }
+        public static DeviceCollectionViewModel CollectionViewModel { get; private set; }
 
         private static readonly Stopwatch s_appTimer = Stopwatch.StartNew();
         private FlyoutViewModel _flyoutViewModel;

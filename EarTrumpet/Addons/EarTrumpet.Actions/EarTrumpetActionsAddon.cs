@@ -2,7 +2,9 @@
 using EarTrumpet.Actions.DataModel.Processing;
 using EarTrumpet.Actions.DataModel.Serialization;
 using EarTrumpet.Actions.ViewModel;
+using EarTrumpet.Actions.Views;
 using EarTrumpet.DataModel.Storage;
+using EarTrumpet.DataModel.WindowsAudio;
 using EarTrumpet.Extensibility;
 using EarTrumpet.UI.Helpers;
 using EarTrumpet.UI.ViewModels;
@@ -17,6 +19,8 @@ namespace EarTrumpet.Actions
     [Export(typeof(EarTrumpetAddon))]
     public class EarTrumpetActionsAddon : EarTrumpetAddon, IEarTrumpetAddonEvents, IEarTrumpetAddonSettingsPage, IEarTrumpetAddonNotificationAreaContextMenu
     {
+        private AppItemViewModel _appItemVM;
+        private AppVolumeDialog _appVolumeDialog = new AppVolumeDialog();
         public static EarTrumpetActionsAddon Current { get; private set; }
         public LocalVariablesContainer LocalVariables { get; private set; }
 
@@ -122,7 +126,37 @@ namespace EarTrumpet.Actions
 
         public void TriggerAction(EarTrumpetAction action)
         {
-            action.Actions.ToList().ForEach(a => ActionProcessor.Invoke(a));
+            action.Actions.ToList().ForEach(a =>
+            {
+                ActionProcessor.Invoke(a);
+
+
+                if (a is SetAppVolumeAction || a is SetAppMuteAction)
+                {
+                    var act = (IPartWithDevice)a;
+
+                    var mgr = WindowsAudioFactory.Create((AudioDeviceKind)System.Enum.Parse(typeof(AudioDeviceKind), act.Device.Kind));
+
+                    var device = (act.Device?.Id == null) ?
+                        mgr.Default : mgr.Devices.FirstOrDefault(d => d.Id == act.Device.Id);
+
+                    foreach (var app in device.Groups.Where(app => (act as IPartWithApp)?.App.Id == AppRef.EveryAppId || app.AppId == (act as IPartWithApp)?.App.Id))
+                    {
+                        _appItemVM = new AppItemViewModel(new UI.ViewModels.DeviceViewModel(App.CollectionViewModel, mgr, device), app);
+                        _appVolumeDialog.DataContext = _appItemVM;
+                        if (!_appVolumeDialog.IsActive)
+                        {
+                            _appVolumeDialog.Visibility = System.Windows.Visibility.Visible;
+                            _appVolumeDialog.ShowDialog();
+                        }
+
+                        else
+                        {
+                            _appVolumeDialog.RestartTimer();
+                        }
+                    }
+                }
+            });
         }
     }
 }
