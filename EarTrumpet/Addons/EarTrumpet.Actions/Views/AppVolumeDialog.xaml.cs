@@ -28,7 +28,7 @@ namespace EarTrumpet.Actions.Views
         {
             InitializeComponent();
 
-            LayoutUpdated += DialogOpened;
+            DataContextChanged += DialogOpened;
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -37,7 +37,7 @@ namespace EarTrumpet.Actions.Views
             Top = desktopWorkingArea.Bottom - Height;
         }
 
-        private void DialogOpened(object sender, EventArgs e)
+        private void DialogOpened(object sender, DependencyPropertyChangedEventArgs e)
         {
             if(DataContext == null)
             {
@@ -65,8 +65,7 @@ namespace EarTrumpet.Actions.Views
                 if(Opacity != 1)
                 {
                     Visibility = Visibility.Hidden;
-                }
-                
+                }                
             };
 
             BeginAnimation(Window.OpacityProperty, anim);
