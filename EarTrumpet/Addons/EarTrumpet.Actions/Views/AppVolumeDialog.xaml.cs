@@ -33,7 +33,7 @@ namespace EarTrumpet.Actions.Views
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var desktopWorkingArea = SystemParameters.WorkArea;
-            Left = desktopWorkingArea.Right / 2 - Width;
+            Left = desktopWorkingArea.Right / 2 - (Width / 2);
             Top = desktopWorkingArea.Bottom - Height;
         }
 
